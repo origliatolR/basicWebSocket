@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title></title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./lib/foundation/css/foundation.css">
+    <script type="text/javascript" src="./lib/modernizr/modernizr.js"></script>
+
+</head>
+<body>
+
+    <div class="row">
+
+		<hr>
+		<div id="future"></div>
+		<form id="form" id="chat_form">
+			<input type="text" id="chat_input">
+			<input type="submit" value="Send" class="button small">
+		</form>
+
+    </div>
+
+    <script type="text/javascript" src="./lib/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="./lib/foundation/js/foundation.js"></script>
+    <script type="text/javascript" src="./socket.io/socket.io.js"></script>
+
+	<script type="text/javascript">
+
+		var socket = io.connect('http://localhost:3000');
+
+		socket.on('connect', function (data) {
+			socket.emit('join', 'a message from client');
+		});
+
+		socket.on('broad', function (data) {
+			$('#future').html(data);
+		});
+
+		$('form').submit(function (e) {
+			event.preventDefault();
+			var message = $('#chat_input').val();
+			socket.emit('messages', message);
+			$('#chat_input').val('');
+		});
+
+	</script>
+
+</body>
+</html>
